@@ -1,35 +1,44 @@
+game_log("---Script Start---");
 
-var urls = [
-	
-	"https://raw.githubusercontent.com/FlammabIe/AdventurelandRepo/master/warrior/targeting.js",
-	
-	"https://raw.githubusercontent.com/FlammabIe/AdventurelandRepo/master/warrior/movement.js",
-	
-	"https://raw.githubusercontent.com/FlammabIe/AdventurelandRepo/master/warrior/skills.js",
-	
-	"https://raw.githubusercontent.com/FlammabIe/AdventurelandRepo/master/warrior/main.js"];
+//main .js for the warrior.
+//uses functions from movement.js, skills.js, and targeting.js
 
-// https://www.w3schools.com/xml/dom_httprequest.asp
-function loadURLs( url ) {
-  var ajax = new XMLHttpRequest();
-  ajax.open( 'GET', url, false ); // <-- the 'false' makes it synchronous
-  ajax.onreadystatechange = function () {
-    var script = ajax.response || ajax.responseText;
-    if (ajax.readyState === 4) {
-      switch( ajax.status) {
-        case 200:
-          eval.apply( window, [script] );
-          game_log("SUCCESS: Script Loaded! ", url);
-          break;
-        default:
-          game_log("ERROR: Script Not Loaded. ", url);
-      }
-    }
-  };
-  ajax.send(null);
-}
+//this interval manages combat and targeting.
+setInterval(function(){
 
-loadURLs(urls);
+    //if character is dead, respawn
+    if(character.rip) setTimeout(respawn, 15000);
 
-// Learn Javascript: https://www.codecademy.com/learn/introduction-to-javascript
-// Write your own CODE: https://github.com/kaansoral/adventureland
+    //set current target to target from previous interval, null if target died
+    var target=get_targeted_monster();
+
+    //if there is no current target, targets a new monster.
+    target(target);
+    //update target.
+    target=get_targeted_monster();
+
+    //if more than 500 distance away from a party member, moves closer.
+    //moves half the distance to target if not in range to attack.
+    movement(target);
+
+    //if there is an applicable target, taunts it.
+    taunt(tauntTarget());
+
+    //basic attack the current target if in range.
+    basicAttack(target);
+
+
+}, 100); //runs 10 times per second
+
+//this inverval manages looting and potion use.
+setInterval(function(){
+
+    //loots nearest chest if any
+    loot();
+
+    //uses health potions first if health is less than 70%
+	//will use mana potions first if mana is less than 50% and hp > 70%
+	//otherwise, will use regen health/mana if below max.
+    use_potion(70, 50);
+
+}, 500); //runs 2 times per second
