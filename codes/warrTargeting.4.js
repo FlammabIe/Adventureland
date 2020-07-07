@@ -2,7 +2,7 @@
 
 //targets nearest monster if not in party.
 //when in party, targets nearest monster targeted by allies.
-function target(target) {
+function newTarget(target) {
 
     if (character.party) {
         //checks if an ally in the party has a target. if a target is found, target it and return

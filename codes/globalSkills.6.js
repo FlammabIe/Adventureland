@@ -1,24 +1,11 @@
+//this file contains functions that can be used by all classes.
+
 //if in range and attack not on cooldown, attacks the target.
 function basicAttack(target){
     if(!target) return;
     if(can_attack(target)){
         set_message("Attacking");
         attack(target);
-    }
-}
-
-//if in range and not on cooldown, taunts the target.
-function taunt(target){
-    if(!target) return;
-    if(distance(target) < 200 && can_use('taunt')){
-        use_skill('taunt', target);
-    }
-}
-
-//if not on cooldown, attempts to use charge.
-function charge(){
-    if(can_use('charge')){
-        use_skill('charge');
     }
 }
 

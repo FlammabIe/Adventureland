@@ -1,3 +1,5 @@
+//this code can be used for warrior, paladin, or rouge.
+
 //If in party, makes sure character is within 500 range of other members.
 function movement(target) {
     if(!target) return;

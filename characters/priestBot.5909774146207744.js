@@ -123,7 +123,7 @@ setInterval(function(){
 //strategy for party of priest - ranger - mage.
 function rangeMage(){
 	//stay in heal range of ranger
-	if(!in_attack_range(rangeBot) && !){
+	if(!in_attack_range(rangeBot) && !rangeBot.rip){
 		xmove(
 			character.x+(rangeBot.x-character.x)/2,
 			character.y+(rangeBot.y-character.y)/2
@@ -135,10 +135,11 @@ function rangeMage(){
 			character.y+(rangeBot.y-character.y)/2
 			);
 	}
+}
 
 //Accepts invites from specified characters.
 function on_party_invite(name){
-	if(name == "rangeBot" || name == "warrBot" || name == "mageBot" || name = "rougeBot"){
+	if(name == "rangeBot" || name == "warrBot" || name == "mageBot" || name == "rougeBot"){
 		accept_party_invite(name);
 	}
 }
@@ -184,6 +185,3 @@ function sendAll(name)
 	}
 	return;
 }
-	
-// Learn Javascript: https://www.codecademy.com/learn/learn-javascript
-// Write your own CODE: https://github.com/kaansoral/adventureland
