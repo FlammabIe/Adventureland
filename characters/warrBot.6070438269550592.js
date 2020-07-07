@@ -12,8 +12,12 @@ load_code(4);
 load_code(5);
 //universal skills
 load_code(6);
+//merchant interactions
+load_code(7);
 
+//invites the party.
 initParty();
+
 //this interval manages combat and targeting.
 setInterval(function(){
 
@@ -53,7 +57,7 @@ setInterval(function(){
 	//otherwise, will use regen health/mana if below max.
     use_potion(70, 50);
 
-    //accepts party invites from other characters the player owns.
-    on_party_invite();
+    //sends all gold and all items that are not in the first inventory slot to the merchant.
+    sendAllButFirst();
 
 }, 500); //runs 2 times per second
