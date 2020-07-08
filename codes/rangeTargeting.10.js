@@ -9,11 +9,12 @@ function newTarget(target) {
     if (target) return;
 
     if (character.party) {
+        let party = parent.party_list;
         //checks if an ally in the party has a target. if a target is found, target it and return
-        for (i = 0; i < parent.party_list.size; i++) {
-            partyMem = get_player(parent.party_list(i));
-            partyTarget = get_target_of(partyMem);
-            if (partyTarget) {
+        for (let name of party) {
+            let partyMem = get_player(name);
+            let partyTarget = get_target_of(partyMem);
+            if (is_monster(partyTarget) && partyMem != character) {
                 change_target(partyTarget);
                 return;
             }
