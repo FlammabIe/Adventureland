@@ -35,9 +35,6 @@ setInterval(function(){
     //moves one third the distance to target if not in range to attack.
     movement(target);
 
-	//gives mana and an attack speed boost to an applicable target.
-	energize();
-
     //basic attack the current target if in range.
     basicAttack(target);
 
@@ -49,6 +46,9 @@ setInterval(function(){
 
     //loots nearest chest if any
     loot();
+
+    //gives mana and an attack speed boost to an applicable target.
+    energize();
 
     //uses health potions first if health is less than 70%
 	//will use mana potions first if mana is less than 50% and hp > 70%

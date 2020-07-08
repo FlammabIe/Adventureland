@@ -7,8 +7,8 @@ function energize(){
 	for(let name of party){
 		let partyMem = get_player(name);
 		if((distance(character, partyMem) < 320 && partyMem.mp<partyMem.max_mp/2) || partyMem.ctype == "ranger"){
-			use_skill('energize', partyMem);
-			return
+			use_skill('energize', partyMem, character.mp/2);
+			return;
 		}
 	}
 }
