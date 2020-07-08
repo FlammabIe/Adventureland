@@ -1,144 +1,61 @@
-// Hey there!
-// This is CODE, lets you control your character with code.
-// If you don't know how to code, don't worry, It's easy.
-// Just set attack_mode to true and ENGAGE!
+//main .js for the mage.
 
-var attack_mode=true
+//loads code for the functions used.
+//ranged movement
+load_code(8);
+//mage skills
+load_code(11);
+//ranged targeting
+load_code(10);
+//universal party setup
+load_code(5);
+//universal skills
+load_code(6);
+//merchant interactions
+load_code(7);
 
-function on_party_invite(name){
-	if(name == "rangeBot"){
-		accept_party_invite(name);
-	}
-}
+//invites the party.
+initParty();
 
-function kiteClose(target)
-{
-	var xmov;
-	var ymov;
-	if(!target)
-	{
-		return;	
-	}
-	if(character.real_x>target.real_x)
-	{
-		xmov = 15;	
-	}
-	else if(character.real_x<target.real_x)
-	{
-		xmov = -15;
-	}
-	if(character.real_y>target.real_y)
-	{
-		ymov = 15;	
-	}
-	else if(character.real_y<target.real_y)
-	{	
-		ymov = -15;
-	}
-	move(
-		character.x+xmov,
-		character.y+ymov
-	);
-	return;
-}
-
-function sendAll(name)
-{
-	for (var i=0;i<42;i++)
-	{
-		send_item(name, i, 1);
-	}
-	return;
-}
-
+//this interval manages combat and targeting.
 setInterval(function(){
-	
-	var rangeBot = get_player("rangeBot");
-	var priestBot = get_player("priestBot");
-	var merchBot = get_player("merchBot");
-	
-	if(rangeBot!= null && !in_attack_range(rangeBot)){
-		xmove(
-			character.x+(rangeBot.x-character.x)/2,
-			character.y+(rangeBot.y-character.y)/2
-			);
-		// Walk half the distance
-	}
-	
-	use_hp_or_mp();
-	loot();
 
-	if(!attack_mode || character.rip || is_moving(character)) return;
+    //if character is dead, respawn
+    if(character.rip) setTimeout(respawn, 15000);
 
-	var target=get_targeted_monster();
-	if(!target && rangeBot == null)
-	{
-		target=get_nearest_monster({min_xp:100,max_att:100});
-		if(target) change_target(target);
-		else
-		{
-			set_message("No Monsters");
-			return;
-		}
-	}
-	
-	else if(!target && rangeBot!= null)
-	{
-		target=get_target_of(rangeBot);
-		if(!target)
-		{
-			target=get_nearest_monster({min_xp:100,max_att:200});	
-		}
-		if(target) change_target(target);
-		else
-		{
-			set_message("No Monsters");
-			return;
-		}
-	}
-	
-	if(distance(character, target) - 40 < 0)
-	{
-		set_message("Kiting");
-		kiteClose(target);
-	}
-	else if(can_use("energize") && !(rangeBot == null) && character.mp>1){
-		set_message("Activating energize");
-		use_skill("energize", rangeBot);
-	}else if(can_use("energize") && !(priestBot == null)){
-		set_message("Activating energize");
-		use_skill("energize", priestBot);
-	}
-		
-	else if(!in_attack_range(target))
-	{
-		move(
-			character.x+(target.x-character.x)/3,
-			character.y+(target.y-character.y)/3
-			);
-		// Walk half the distance
-	}
-	else if(can_attack(target))
-	{
-		set_message("Attacking");
-		attack(target);
-	}
-	if(!(merchBot == null) && in_attack_range(merchBot)){
-		send_gold(merchBot, character.gold);
-		for(var i=0;i<42;i++)
-		{
-			if(!merchBot.items[i])
-			{
-				for(var j=0;j<42;j++)
-				{
-					if(!character.items[j]) continue;
-					send_item(merchBot, j, 1)
-					break
-				}
-			}
-		}
-	}
-},1000/4); // Loops every 1/4 seconds.
+    //set current target to target from previous interval, null if target died
+    var target=get_targeted_monster();
 
-// Learn Javascript: https://www.codecademy.com/learn/learn-javascript
-// Write your own CODE: https://github.com/kaansoral/adventureland
+    //if there is no current target, targets a new monster.
+    newTarget(target);
+    //update target.
+    target=get_targeted_monster();
+
+    //if more than 500 distance away from a party member, moves closer.
+    //moves one third the distance to target if not in range to attack.
+    movement(target);
+
+	//gives mana and an attack speed boost to an applicable target.
+	energize();
+
+    //basic attack the current target if in range.
+    basicAttack(target);
+
+
+}, 100); //runs 10 times per second
+
+//this inverval manages looting and potion use and other functions.
+setInterval(function(){
+
+    //loots nearest chest if any
+    loot();
+
+    //uses health potions first if health is less than 70%
+	//will use mana potions first if mana is less than 50% and hp > 70%
+	//otherwise, will use regen health/mana if below max.
+    use_potion(60, 60);
+
+    //sends all gold and all items that are not in the first inventory slot to the merchant.
+    sendAllButFirst();
+
+}, 500); //runs 2 times per second

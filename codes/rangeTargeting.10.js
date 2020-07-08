@@ -1,5 +1,4 @@
-//contains functions for targeting, and for skills which may want to target something other than the main target.
-//TODO: 3shot, 5shot, poisonarrow, 4fingers, piercingshot
+//contains functions for targeting with ranged characters.
 
 //when in party, targets nearest monster targeted by allies.
 //if no allies have targets or not in a party, targets nearest enemy.

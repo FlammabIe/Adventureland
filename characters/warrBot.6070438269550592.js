@@ -37,7 +37,7 @@ setInterval(function(){
     movement(target);
 
     //if there is an applicable target, taunts it.
-    taunt(tauntTarget());
+    taunt();
 
     //basic attack the current target if in range.
     basicAttack(target);

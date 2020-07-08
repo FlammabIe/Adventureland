@@ -1,11 +1,11 @@
 //main .js for the ranger.
 
 //loads code for the functions used.
-//ranger movement
+//ranged movement
 load_code(8);
 //ranger skills
 load_code(9);
-//ranger targeting
+//ranged targeting
 load_code(10);
 //universal party setup
 load_code(5);

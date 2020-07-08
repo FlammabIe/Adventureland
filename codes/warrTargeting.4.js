@@ -1,4 +1,4 @@
-//contains functions for targeting, and for skills who may want to target something other than the main target.
+//contains functions for melee targeting.
 
 //targets nearest monster if not in party.
 //when in party, targets nearest monster targeted by allies.
@@ -30,20 +30,4 @@ function newTarget(target) {
         set_message("No Applicable Monsters");
         return;
     }
-}
-
-//returns a monster entity to taunt.
-//If no applicable target, returns null.
-//automatically returns null if not in a party (no need to taunt).
-function tauntTarget(){
-    if(!character.party) return;
-    let party = parent.party_list;
-    for(let name of party){
-        let partyMem = get_player(name);
-        let partyTarget = get_target_of(partyMem);
-        if(is_monster(partyTarget) && partyMem != character){
-            return partyTarget;
-        }
-    }
-    return;
 }
