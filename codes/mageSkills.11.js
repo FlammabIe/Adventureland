@@ -2,7 +2,7 @@
 
 //if a party member has less than half of their max mp, or if they are a ranger, energizes them.
 function energize(){
-	if(!character.party || !can_use('energize')) return;
+	if(!character.party || !can_use('energize') || character.mp == 0) return;
 	let party = parent.party_list;
 	for(let name of party){
 		let partyMem = get_player(name);
