@@ -1,5 +1,4 @@
 //main .js for the warrior.
-//uses functions from movement.js, skills.js, and targeting.js
 
 //loads code for the functions used.
 //warrior movement
